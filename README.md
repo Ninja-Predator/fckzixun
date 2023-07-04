@@ -1,3 +1,4 @@
+资讯扣工资？搞笑不搞笑
 <h1 align="center">Welcome to hamibot-starter 👋</h1>
 <p align="center">
   <a href="https://www.npmjs.com/package/script-template" target="_blank">
