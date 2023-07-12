@@ -786,8 +786,6 @@ function init() {
   if (SHOW_CONSOLE === "true") {
     console.show();
     sleep(SHORT_WAIT_MS);
-    console.setPosition(0, 100);
-    console.setSize(device.width, device.height / 4);
   }
 
   setScreenMetrics(1080, 2400);
@@ -798,6 +796,7 @@ init();
 console.show();
 holyBack();
 var errTimes = 0;
+console.log("看看设备的分辨率，宽", device.width, "高", device.height);
 app.launchApp("贝贝管理");
 sleep(5000);
 holyBack();
@@ -818,6 +817,8 @@ while (errTimes < 3) {
   holyBack();
 }
 
+console.hide();
+
 function readZiXun() {
   var _a;
 
@@ -826,8 +827,27 @@ function readZiXun() {
   var zixunBtn = text("资讯").findOne();
 
   if (zixunBtn) {
+    console.log("这是啥？资讯，点一下");
     (_a = zixunBtn.parent()) === null || _a === void 0 ? void 0 : _a.click();
     sleep(5000);
+    console.log("刷新一下");
+    swipe(device.width / 2, device.height / 2, device.width / 2, device.height * 2 / 3, 1000);
+    sleep(2000);
+
+    for (var i = 0; i < 5; i++) {
+      if (className("android.widget.ImageView").depth(21).exists()) {
+        console.log("还在刷新？再等五秒看看");
+        sleep(5000);
+      } else {
+        break;
+      }
+
+      if (i == 4) {
+        console.log("妈的不等了，重开");
+        return false;
+      }
+    }
+
     var readButtons = id("com.shineyue.pm:id/tv_news_is_read").find();
 
     if (readButtons.empty()) {
@@ -837,8 +857,12 @@ function readZiXun() {
       try {
         readButtons.forEach(function (readButton) {
           if (readButton.text() !== "已读") {
+            console.hide();
+            sleep(1000);
             click(readButton.bounds().centerX(), readButton.bounds().centerY());
-            sleep(10000);
+            sleep(1000);
+            console.show();
+            sleep(8000);
             throw new Error("Stop the loop");
           }
         });
@@ -847,6 +871,7 @@ function readZiXun() {
         return true;
       }
 
+      console.log("没未读了?");
       return false;
     }
   } else {
